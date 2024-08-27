@@ -15,4 +15,4 @@ jobs:
             export ALFRED_CONFIG_PATH="$(pwd)/alfred/config_alfred.h"
             cd alfred/build
             cmake -D CONFIG_FILE="$ALFRED_CONFIG_PATH" ..
-            make
+            make VERBOSE=1
