@@ -6,7 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Alfred Sunray
+      - name: Build Alfred Sunray Binary
         uses: pguyot/arm-runner-action@v2
         with:
           commands: |
@@ -15,4 +15,33 @@ jobs:
             export ALFRED_CONFIG_PATH="$(pwd)/alfred/config_alfred.h"
             cd alfred/build
             cmake -D CONFIG_FILE="$ALFRED_CONFIG_PATH" ..
-            make VERBOSE=1
+            make
+
+      - name: Build Alfred Sunray DEB Package
+        uses: pguyot/arm-runner-action@v2
+        with:
+          commands: |
+            sudo apt update
+            sudo apt install -y dpkg
+
+            cd alfred/build
+            mkdir -p deb/usr/bin deb/DEBIAN
+
+            cp sunray deb/usr/bin
+
+            cat << EOF > deb/DEBIAN/control
+            Package: sunray
+            Version: 1.0
+            Maintainer: Todo <todo@local.host>
+            Architecture: aarch64
+            Description: Sunray firmware is an alternative Firmware (experimental) for Alfred robot with Alfred RTK conversion kit
+            Depends: libbluetooth
+            EOF
+
+            cd deb
+            dpkg-deb --root-owner-group --build sunray
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sunray.deb
+          path: alfred/build/deb/sunray.deb
