@@ -1,0 +1,18 @@
+on: push
+
+jobs:
+  deb-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Alfred Sunray
+        uses: pguyot/arm-runner-action@v2
+        with:
+          commands: |
+            sudo apt update
+            sudo apt install -y build-essential cmake libbluetooth-dev
+            export ALFRED_CONFIG_PATH="$(pwd)/alfred/config_alfred.h"
+            cd alfred/build
+            cmake -D CONFIG_FILE="$ALFRED_CONFIG_PATH" ..
+            make
