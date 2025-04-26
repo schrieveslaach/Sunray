@@ -1,4 +1,4 @@
-// Ardumower Sunray 
+// Ardumower Sunray
 // Copyright (c) 2013-2020 by Alexander Grau, Grau GmbH
 // Licensed GPLv3 for open source use
 // or Grau GmbH Commercial License for commercial use (http://grauonline.de/cms2/?page_id=153)
@@ -13,13 +13,10 @@
 void processComm();
 void outputConsole();
 
-void processCmd(String channel, bool checkCrc, bool decrypt, bool verbose);
+String processCmd(String channel, bool checkCrc, bool decrypt, bool verbose, const String &cmd);
 void processConsole();
-void cmdSwitchOffRobot();
+String cmdSwitchOffRobot();
 
-
-extern String cmd;
-extern String cmdResponse;
 
 extern bool bleConnected;
 
